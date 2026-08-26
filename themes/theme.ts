@@ -15,8 +15,8 @@ export const Theme = {
       bold: "InterBold",
     },
     sizes: {
-      default: 12,
-      lg: 14,
+      default: 16,
+      lg: 20,
     },
   },
 };
