@@ -1,3 +1,4 @@
+import { TaskModel } from "@/models/task";
 import { Theme } from "@/themes/theme";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useRef } from "react";
@@ -14,10 +15,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 type DrawerProps = {
   isMounted: boolean;
   onClose: () => void;
-  // TODO: pass task as a prop to be modified
+  task: TaskModel;
 };
 
-export function Drawer({ isMounted, onClose }: DrawerProps) {
+export function Drawer({ isMounted, onClose, task }: DrawerProps) {
   const insets = useSafeAreaInsets();
 
   const { width } = useWindowDimensions();
@@ -65,7 +66,7 @@ export function Drawer({ isMounted, onClose }: DrawerProps) {
               color={Theme.colors.primary50}
             />
           </Pressable>
-          <Text style={styles.title}>{/* TODO: insert task title */}</Text>
+          <Text style={styles.title}>{task.title}</Text>
         </View>
       </Animated.View>
     </View>
