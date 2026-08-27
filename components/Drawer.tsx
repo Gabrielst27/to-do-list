@@ -14,6 +14,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 type DrawerProps = {
   isMounted: boolean;
   onClose: () => void;
+  // TODO: pass task as a prop to be modified
 };
 
 export function Drawer({ isMounted, onClose }: DrawerProps) {
@@ -64,7 +65,7 @@ export function Drawer({ isMounted, onClose }: DrawerProps) {
               color={Theme.colors.primary50}
             />
           </Pressable>
-          <Text style={styles.title}>Criar nova tarefa</Text>
+          <Text style={styles.title}>{/* TODO: insert task title */}</Text>
         </View>
       </Animated.View>
     </View>

@@ -6,7 +6,7 @@ import {
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
 import { useFonts } from "expo-font";
-import { StatusBar, StyleSheet } from "react-native";
+import { StatusBar, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
@@ -20,8 +20,11 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <SafeAreaView style={styles.mainContainer}>
         <StatusBar hidden={true} />
+        <View style={styles.header}>
+          <Text style={styles.title}>Lista de tarefas</Text>
+        </View>
+        <Toolbar />
       </SafeAreaView>
-      <Toolbar />
     </SafeAreaProvider>
   );
 }
@@ -30,6 +33,13 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: Theme.colors.background,
-    justifyContent: "space-between",
+  },
+  header: {
+    padding: 24,
+  },
+  title: {
+    fontFamily: Theme.text.families.bold,
+    fontSize: Theme.text.sizes.xl,
+    color: Theme.colors.primary100,
   },
 });

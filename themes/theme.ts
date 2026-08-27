@@ -7,7 +7,7 @@ export const Theme = {
     primary900: "#080C32",
     background: "#27262D",
     drawer: "#32303B",
-    tabs: "#1D1C1F",
+    toolbar: "#1D1C1F",
   },
   text: {
     families: {
@@ -18,6 +18,7 @@ export const Theme = {
     sizes: {
       default: 16,
       lg: 20,
+      xl: 24,
     },
   },
 };
