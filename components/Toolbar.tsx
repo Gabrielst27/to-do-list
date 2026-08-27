@@ -22,7 +22,14 @@ export function Toolbar() {
 
       <View style={[styles.mainContainer, { height: insets.bottom + 40 }]}>
         <Pressable
-          style={styles.addButton}
+          style={({ pressed }) => [
+            styles.addButton,
+            {
+              backgroundColor: pressed
+                ? Theme.colors.primary700
+                : Theme.colors.primary500,
+            },
+          ]}
           onPress={() => setDrawerIsVisible(true)}
         >
           <MaterialIcons name="add" size={40} color={Theme.colors.primary50} />
@@ -45,7 +52,6 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: Theme.colors.primary500,
     justifyContent: "center",
     alignItems: "center",
   },

@@ -19,7 +19,7 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.mainContainer}>
-        <StatusBar barStyle={"light-content"} />
+        <StatusBar hidden={true} />
       </SafeAreaView>
       <Toolbar />
     </SafeAreaProvider>

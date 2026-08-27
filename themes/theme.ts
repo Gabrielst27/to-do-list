@@ -3,6 +3,7 @@ export const Theme = {
     primary50: "#F2F3FF",
     primary100: "#CDD1FF",
     primary500: "#3A48DF",
+    primary700: "#2732AD",
     primary900: "#080C32",
     background: "#27262D",
     drawer: "#32303B",
