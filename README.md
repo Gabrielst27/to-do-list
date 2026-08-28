@@ -26,13 +26,9 @@ O projeto foi desenvolvido com foco em uma interface simples, responsiva e agrad
 
 > Screenshots do aplicativo
 
-|                     Lista de tarefas                    |                      Edição da tarefa                     |
+|                     Tela inicial                    |                      Drawer da tarefa                     |
 | :-----------------------------------------------------: | :-------------------------------------------------------: |
-| ![Lista de tarefas](./assets/screenshots/task-list.png) | ![Edição da tarefa](./assets/screenshots/task-drawer.png) |
-
-|                       Tarefa concluída                       |                 Confirmação de exclusão                 |
-| :----------------------------------------------------------: | :-----------------------------------------------------: |
-| ![Tarefa concluída](./assets/screenshots/task-completed.png) | ![Excluir tarefa](./assets/screenshots/delete-task.png) |
+| ![Lista de tarefas](./assets/presentation/to-do-list-home.jpeg) | ![Edição da tarefa](./assets/presentation/to-do-list-drawer.jpeg) |
 
 ---
 
