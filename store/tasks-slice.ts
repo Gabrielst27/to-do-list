@@ -1,5 +1,6 @@
 import { TaskModel } from "@/models/task";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import * as Crypto from "expo-crypto";
 
 type TasksState = {
   tasks: TaskModel[];
@@ -20,7 +21,7 @@ const tasksSlice = createSlice({
 
       prepare: (title: string) => ({
         payload: {
-          id: crypto.randomUUID(),
+          id: Crypto.randomUUID(),
           title,
           isDone: false,
           createdAt: new Date().toISOString(),

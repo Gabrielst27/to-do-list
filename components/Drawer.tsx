@@ -1,7 +1,7 @@
 import { TaskModel } from "@/models/task";
 import { Theme } from "@/themes/theme";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   Animated,
   Pressable,
@@ -13,41 +13,47 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type DrawerProps = {
-  isMounted: boolean;
+  visible: boolean;
+  task: TaskModel | null;
   onClose: () => void;
-  task: TaskModel;
 };
 
-export function Drawer({ isMounted, onClose, task }: DrawerProps) {
+export function Drawer({ visible, task, onClose }: DrawerProps) {
   const insets = useSafeAreaInsets();
-
   const { width } = useWindowDimensions();
+
   const translateX = useRef(new Animated.Value(width)).current;
 
-  if (isMounted) {
-    translateX.setValue(width);
+  useEffect(() => {
+    if (visible) {
+      translateX.setValue(width);
 
-    Animated.timing(translateX, {
-      toValue: 0,
-      duration: 250,
-      useNativeDriver: true,
-    }).start();
-  }
+      Animated.timing(translateX, {
+        toValue: 0,
+        duration: 250,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [visible, width]);
 
-  function closeModal() {
+  function closeDrawer() {
     Animated.timing(translateX, {
       toValue: width,
       duration: 250,
       useNativeDriver: true,
     }).start(() => {
-      isMounted = false;
       onClose();
     });
   }
 
+  if (!visible || !task) {
+    return null;
+  }
+
   return (
     <View style={styles.drawerOverlay}>
-      <Pressable style={styles.overlay} onPress={closeModal} />
+      <Pressable style={styles.overlay} onPress={closeDrawer} />
+
       <Animated.View
         style={[
           styles.drawer,
@@ -59,14 +65,15 @@ export function Drawer({ isMounted, onClose, task }: DrawerProps) {
         ]}
       >
         <View style={styles.formHeader}>
-          <Pressable onPress={closeModal}>
+          <Pressable onPress={closeDrawer}>
             <MaterialIcons
               name="close"
               size={24}
               color={Theme.colors.primary50}
             />
           </Pressable>
-          <Text style={styles.title}>{task.title}</Text>
+
+          <Text style={styles.title}>Fechar</Text>
         </View>
       </Animated.View>
     </View>

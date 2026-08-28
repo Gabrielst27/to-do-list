@@ -1,11 +1,41 @@
 import { Theme } from "@/themes/theme";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { Pressable, StyleSheet, TextInput, View } from "react-native";
+import { useState } from "react";
+import { Alert, Pressable, StyleSheet, TextInput, View } from "react-native";
 
-export function Toolbar() {
+type ToolbarProps = {
+  onAdd: (title: string) => void;
+};
+
+export function Toolbar({ onAdd }: ToolbarProps) {
+  const [title, setTitle] = useState("");
+
+  function handleAdd() {
+    const normalizedTitle = title.trim();
+
+    if (!normalizedTitle) {
+      Alert.alert(
+        "Título obrigatório",
+        "Digite um título para criar a tarefa.",
+      );
+      return;
+    }
+
+    onAdd(normalizedTitle);
+    setTitle("");
+  }
+
   return (
     <View style={styles.mainContainer}>
-      <TextInput style={styles.titleInput}></TextInput>
+      <TextInput
+        value={title}
+        onChangeText={setTitle}
+        style={styles.titleInput}
+        placeholder="Digite a nova tarefa"
+        placeholderTextColor={Theme.colors.muted}
+        returnKeyType="done"
+        onSubmitEditing={handleAdd}
+      ></TextInput>
       <Pressable
         style={({ pressed }) => [
           styles.addButton,
@@ -15,7 +45,7 @@ export function Toolbar() {
               : Theme.colors.primary500,
           },
         ]}
-        onPress={() => {}}
+        onPress={handleAdd}
       >
         <MaterialIcons name="add" size={32} color={Theme.colors.primary50} />
       </Pressable>
@@ -40,6 +70,8 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 16,
     borderColor: Theme.colors.primary50,
     backgroundColor: Theme.colors.background,
+    color: Theme.colors.primary50,
+    fontSize: Theme.text.sizes.default,
   },
   addButton: {
     width: 48,

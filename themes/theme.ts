@@ -8,6 +8,7 @@ export const Theme = {
     background: "#27262D",
     drawer: "#32303B",
     toolbar: "#1D1C1F",
+    muted: "#888888",
   },
   text: {
     families: {
@@ -16,9 +17,9 @@ export const Theme = {
       bold: "InterBold",
     },
     sizes: {
+      sm: 12,
       default: 16,
       lg: 20,
-      xl: 24,
     },
   },
 };
