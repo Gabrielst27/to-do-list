@@ -3,7 +3,7 @@ import { TaskList } from "@/components/TaskList";
 import { Toolbar } from "@/components/Toolbar";
 import { TaskModel } from "@/models/task";
 import { persistor, store } from "@/store";
-import { addTask } from "@/store/tasks-slice";
+import { addTask, updateTask } from "@/store/tasks-slice";
 import { Theme } from "@/themes/theme";
 import {
   Inter_400Regular,
@@ -48,6 +48,11 @@ function App() {
     dispatch(addTask(title));
   }
 
+  function handleSaveTaskTitle(id: string, newTitle: string): boolean {
+    dispatch(updateTask({ id, title: newTitle }));
+    return true;
+  }
+
   function handleSelectTask(task: TaskModel) {
     setSelectedTask(task);
     setDrawerVisible(true);
@@ -55,6 +60,7 @@ function App() {
 
   function handleCloseDrawer() {
     setDrawerVisible(false);
+    setSelectedTask(null);
   }
 
   return (
@@ -66,11 +72,14 @@ function App() {
         </View>
         <Toolbar onAdd={handleAddTask} />
         <TaskList onSelect={handleSelectTask} />
-        <Drawer
-          visible={drawerVisible}
-          task={selectedTask}
-          onClose={handleCloseDrawer}
-        />
+        {!!selectedTask && (
+          <Drawer
+            visible={drawerVisible}
+            task={selectedTask}
+            onClose={handleCloseDrawer}
+            onSaveTitle={handleSaveTaskTitle}
+          />
+        )}
       </SafeAreaView>
     </SafeAreaProvider>
   );

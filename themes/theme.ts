@@ -2,13 +2,16 @@ export const Theme = {
   colors: {
     primary50: "#F2F3FF",
     primary100: "#CDD1FF",
+    primary300: "#919af3",
     primary500: "#3A48DF",
     primary700: "#2732AD",
     primary900: "#080C32",
     background: "#27262D",
     drawer: "#32303B",
     toolbar: "#1D1C1F",
-    muted: "#888888",
+    muted: "#a9a9a9",
+    mutedForeground: "#696969",
+    danger: "#ad2742",
   },
   text: {
     families: {

@@ -1,12 +1,14 @@
 import { TaskModel } from "@/models/task";
 import { Theme } from "@/themes/theme";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
+  Alert,
   Animated,
   Pressable,
   StyleSheet,
   Text,
+  TextInput,
   useWindowDimensions,
   View,
 } from "react-native";
@@ -14,13 +16,17 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type DrawerProps = {
   visible: boolean;
-  task: TaskModel | null;
+  task: TaskModel;
   onClose: () => void;
+  onSaveTitle: (id: string, newTitle: string) => boolean;
 };
 
-export function Drawer({ visible, task, onClose }: DrawerProps) {
+export function Drawer({ visible, task, onClose, onSaveTitle }: DrawerProps) {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
+
+  const [newTitle, setNewTitle] = useState(task.title);
+  const [savedTitle, setSavedTitle] = useState(task.title);
 
   const translateX = useRef(new Animated.Value(width)).current;
 
@@ -46,14 +52,13 @@ export function Drawer({ visible, task, onClose }: DrawerProps) {
     });
   }
 
-  if (!visible || !task) {
+  if (!visible) {
     return null;
   }
 
   return (
     <View style={styles.drawerOverlay}>
       <Pressable style={styles.overlay} onPress={closeDrawer} />
-
       <Animated.View
         style={[
           styles.drawer,
@@ -64,16 +69,84 @@ export function Drawer({ visible, task, onClose }: DrawerProps) {
           },
         ]}
       >
-        <View style={styles.formHeader}>
-          <Pressable onPress={closeDrawer}>
-            <MaterialIcons
-              name="close"
-              size={24}
-              color={Theme.colors.primary50}
+        <View style={styles.drawerHeader}>
+          <View style={styles.topRow}>
+            <View style={styles.closeDrawerRow}>
+              <Pressable onPress={closeDrawer}>
+                <MaterialIcons
+                  name="close"
+                  size={24}
+                  color={Theme.colors.primary50}
+                />
+              </Pressable>
+
+              <Text style={styles.closeDrawerText}>Fechar</Text>
+            </View>
+
+            <Pressable onPress={closeDrawer}>
+              <MaterialIcons
+                name="delete"
+                size={24}
+                color={Theme.colors.danger}
+              />
+            </Pressable>
+          </View>
+
+          <View style={styles.titleContainer}>
+            <TextInput
+              value={newTitle}
+              onChangeText={setNewTitle}
+              style={styles.titleInput}
+              multiline
+              scrollEnabled
+              textAlignVertical="top"
             />
+          </View>
+        </View>
+
+        <View style={styles.drawerFooter}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.button,
+              savedTitle === newTitle
+                ? styles.disabledSaveTitleButton
+                : pressed
+                  ? styles.pressedSaveTitleButton
+                  : styles.saveTitleButton,
+            ]}
+            onPress={() => {
+              if (savedTitle === newTitle) {
+                Alert.alert(
+                  "Não houve mudança no título",
+                  "É necessário alterar o título para poder salvá-lo.",
+                );
+                return;
+              }
+
+              const success = onSaveTitle(task.id, newTitle);
+
+              if (success) {
+                setSavedTitle(newTitle);
+              }
+            }}
+          >
+            <Text
+              style={[
+                styles.buttonText,
+                savedTitle === newTitle
+                  ? styles.disabledSaveTitleButtonText
+                  : styles.saveTitleButtonText,
+              ]}
+            >
+              Salvar título
+            </Text>
           </Pressable>
 
-          <Text style={styles.title}>Fechar</Text>
+          <Pressable style={[styles.button, styles.finishButton]}>
+            <Text style={[styles.buttonText, styles.finishButtonText]}>
+              Concluir Tarefa
+            </Text>
+          </Pressable>
         </View>
       </Animated.View>
     </View>
@@ -101,15 +174,76 @@ const styles = StyleSheet.create({
     width: "80%",
     paddingHorizontal: 12,
     backgroundColor: Theme.colors.background,
+    gap: 40,
   },
-  formHeader: {
+  topRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  drawerHeader: {
+    flex: 1,
+    gap: 48,
+  },
+  drawerFooter: {
+    gap: 16,
+  },
+  closeDrawerRow: {
     flexDirection: "row",
     gap: 12,
     alignItems: "center",
   },
-  title: {
+  closeDrawerText: {
     fontSize: Theme.text.sizes.lg,
     fontFamily: Theme.text.families.bold,
     color: Theme.colors.primary50,
+  },
+  titleContainer: {
+    flex: 1,
+  },
+  titleInput: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 16,
+    backgroundColor: Theme.colors.toolbar,
+    color: Theme.colors.primary50,
+    fontSize: Theme.text.sizes.default,
+    fontFamily: Theme.text.families.regular,
+    textAlignVertical: "top",
+  },
+  button: {
+    padding: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 16,
+  },
+  buttonText: {
+    fontFamily: Theme.text.families.semibold,
+    fontSize: Theme.text.sizes.default,
+  },
+  saveTitleButton: {
+    backgroundColor: Theme.colors.primary100,
+  },
+  pressedSaveTitleButton: {
+    backgroundColor: Theme.colors.primary300,
+  },
+  disabledSaveTitleButton: {
+    backgroundColor: Theme.colors.muted,
+  },
+  saveTitleButtonText: {
+    color: Theme.colors.primary900,
+  },
+  disabledSaveTitleButtonText: {
+    color: Theme.colors.mutedForeground,
+  },
+  finishButton: {
+    backgroundColor: Theme.colors.primary500,
+  },
+  finishButtonText: {
+    color: Theme.colors.primary50,
+  },
+  deleteButton: {
+    backgroundColor: Theme.colors.danger,
   },
 });
