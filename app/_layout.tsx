@@ -16,6 +16,7 @@ import {
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
 import { useFonts } from "expo-font";
+import { Image } from "expo-image";
 import { useState } from "react";
 import { StatusBar, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
@@ -81,6 +82,10 @@ function App() {
       <SafeAreaView style={styles.mainContainer}>
         <StatusBar hidden />
         <View style={styles.header}>
+          <Image
+            source={require("../assets/images/logo.svg")}
+            style={{ width: 32, height: 32 }}
+          />
           <Text style={styles.title}>Lista de tarefas</Text>
         </View>
         <Toolbar onAdd={handleAddTask} />
@@ -107,6 +112,9 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 24,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
   },
   title: {
     fontFamily: Theme.text.families.bold,
