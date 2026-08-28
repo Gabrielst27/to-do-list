@@ -1,50 +1,402 @@
-# Welcome to your Expo app 👋
+# 📝 Lista de Tarefas
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicativo mobile de gerenciamento de tarefas desenvolvido com **React Native + Expo**, com gerenciamento de estado utilizando **Redux** e persistência local através do **AsyncStorage**.
 
-## Get started
+O projeto foi desenvolvido com foco em uma interface simples, responsiva e agradável, permitindo criar, editar, concluir, reabrir e excluir tarefas.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## ✨ Funcionalidades
 
-2. Start the app
+* ✅ Criar novas tarefas
+* ✏️ Editar o título das tarefas
+* ✔️ Concluir e reabrir tarefas
+* 🗑️ Excluir tarefas com confirmação
+* 💾 Persistência local das tarefas
+* 📱 Interface adaptada para dispositivos móveis
+* 🌙 Suporte a tema claro/escuro do sistema
+* 🎨 Interface construída com componentes reutilizáveis
+* ↔️ Drawer lateral para gerenciamento individual da tarefa
+* 📜 Suporte a títulos longos com rolagem
+* ⚡ Animações de abertura e fechamento do Drawer
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 📱 Interface
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+> Screenshots do aplicativo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+|                     Lista de tarefas                    |                      Edição da tarefa                     |
+| :-----------------------------------------------------: | :-------------------------------------------------------: |
+| ![Lista de tarefas](./assets/screenshots/task-list.png) | ![Edição da tarefa](./assets/screenshots/task-drawer.png) |
 
-## Get a fresh project
+|                       Tarefa concluída                       |                 Confirmação de exclusão                 |
+| :----------------------------------------------------------: | :-----------------------------------------------------: |
+| ![Tarefa concluída](./assets/screenshots/task-completed.png) | ![Excluir tarefa](./assets/screenshots/delete-task.png) |
 
-When you're ready, run:
+---
 
-```bash
-npm run reset-project
+## 🛠️ Tecnologias
+
+### Mobile
+
+* **React Native**
+* **Expo**
+* **Expo Router**
+* **TypeScript**
+
+### Gerenciamento de estado
+
+* **Redux Toolkit**
+* **React Redux**
+* **Redux Persist**
+
+### Persistência
+
+* **AsyncStorage**
+
+### Interface
+
+* **React Native Animated**
+* **Material Icons**
+* **Expo Fonts**
+* **React Native Safe Area Context**
+
+### Tipografia
+
+* **Inter**
+
+---
+
+## 🏗️ Arquitetura
+
+O projeto utiliza uma separação baseada em componentes, modelos e gerenciamento centralizado de estado.
+
+```text
+todo-list/
+│
+├── app/
+│   └── _layout.tsx
+│
+├── assets/
+│   └── images/
+│
+├── components/
+│   ├── Drawer.tsx
+│   ├── TaskItem.tsx
+│   ├── TaskList.tsx
+│   └── Toolbar.tsx
+│
+├── models/
+│   └── task.ts
+│
+├── store/
+│   ├── index.ts
+│   └── tasks-slice.ts
+│
+├── themes/
+│   └── theme.ts
+│
+├── app.json
+├── package.json
+└── tsconfig.json
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 💾 Persistência local
 
-## Learn more
+As tarefas são armazenadas localmente utilizando:
 
-To learn more about developing your project with Expo, look at the following resources:
+**Redux Persist → AsyncStorage**
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Sempre que o estado das tarefas é alterado, o Redux Persist persiste o estado no armazenamento local do dispositivo.
 
-## Join the community
+Ao iniciar o aplicativo novamente, o estado é reidratado automaticamente antes da aplicação ser renderizada através do `PersistGate`.
 
-Join our community of developers creating universal apps.
+```text
+Redux Store
+     │
+     ▼
+Redux Persist
+     │
+     ▼
+AsyncStorage
+     │
+     │ app reiniciado
+     ▼
+Rehydration
+     │
+     ▼
+Redux Store restaurada
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Dessa forma, as tarefas continuam disponíveis mesmo depois de fechar e abrir o aplicativo.
+
+---
+
+## 🎯 Modelo de tarefa
+
+Cada tarefa possui a seguinte estrutura:
+
+```ts
+type TaskModel = {
+  id: string;
+  title: string;
+  isDone: boolean;
+  createdAt: string;
+};
+```
+
+| Campo       | Tipo      | Descrição                        |
+| ----------- | --------- | -------------------------------- |
+| `id`        | `string`  | Identificador único da tarefa    |
+| `title`     | `string`  | Título da tarefa                 |
+| `isDone`    | `boolean` | Indica se a tarefa foi concluída |
+| `createdAt` | `string`  | Data e hora de criação           |
+
+---
+
+## 🔄 Operações disponíveis
+
+O Redux Slice disponibiliza quatro operações principais:
+
+```ts
+addTask(title)
+updateTask({ id, title })
+toggleTask(id)
+deleteTask(id)
+```
+
+### Criar
+
+```ts
+dispatch(addTask("Estudar React Native"));
+```
+
+### Editar
+
+```ts
+dispatch(
+  updateTask({
+    id,
+    title: "Estudar React Native e Redux",
+  }),
+);
+```
+
+### Concluir/Reabrir
+
+```ts
+dispatch(toggleTask(id));
+```
+
+### Excluir
+
+```ts
+dispatch(deleteTask(id));
+```
+
+---
+
+## 🎨 Componentes
+
+### `Toolbar`
+
+Responsável pela criação de novas tarefas.
+
+Possui:
+
+* Campo de texto
+* Validação de título vazio
+* Botão de adicionar
+* Suporte ao envio pelo teclado
+
+---
+
+### `TaskList`
+
+Responsável pela renderização da lista utilizando `FlatList`.
+
+Também possui um estado visual para quando nenhuma tarefa foi cadastrada.
+
+---
+
+### `TaskItem`
+
+Representa individualmente uma tarefa.
+
+Exibe:
+
+* Status da tarefa
+* Título
+* Data de criação
+
+Tarefas concluídas recebem uma representação visual diferente.
+
+---
+
+### `Drawer`
+
+Painel lateral utilizado para gerenciamento de uma tarefa específica.
+
+Permite:
+
+* Editar título
+* Salvar alterações
+* Concluir tarefa
+* Reabrir tarefa
+* Excluir tarefa
+* Fechar o painel
+
+O Drawer utiliza `Animated` para realizar a transição lateral.
+
+---
+
+## 🚀 Como executar
+
+### Pré-requisitos
+
+Tenha instalado:
+
+* [Node.js](https://nodejs.org/)
+* npm
+* Android Studio **ou** Expo Go
+* Git
+
+---
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/SEU_USUARIO/todo-list.git
+```
+
+Entre na pasta:
+
+```bash
+cd todo-list
+```
+
+---
+
+### 2. Instale as dependências
+
+```bash
+npm install
+```
+
+---
+
+### 3. Inicie o projeto
+
+```bash
+npm start
+```
+
+Ou:
+
+```bash
+npx expo start
+```
+
+---
+
+## 📱 Executando no Android
+
+Para executar utilizando uma development build:
+
+```bash
+npx expo run:android
+```
+
+Caso tenha alterado configurações nativas do Expo:
+
+```bash
+npx expo prebuild --clean
+npx expo run:android
+```
+
+---
+
+## 🧹 Limpar o cache
+
+Caso o Metro apresente algum comportamento inesperado:
+
+```bash
+npx expo start -c
+```
+
+---
+
+## 📦 Build
+
+Para gerar uma build utilizando EAS:
+
+```bash
+eas build
+```
+
+Para Android:
+
+```bash
+eas build --platform android
+```
+
+---
+
+## 📌 Próximos passos
+
+Algumas funcionalidades que podem ser adicionadas futuramente:
+
+* [ ] Categorias de tarefas
+* [ ] Prioridade das tarefas
+* [ ] Data de vencimento
+* [ ] Filtros
+* [ ] Ordenação
+* [ ] Busca de tarefas
+* [ ] Notificações
+* [ ] Sincronização com backend
+* [ ] Autenticação de usuários
+* [ ] Persistência em banco de dados
+* [ ] Testes unitários
+* [ ] Testes de componentes
+
+---
+
+## 📚 Objetivo do projeto
+
+Este projeto foi desenvolvido como uma aplicação prática para explorar conceitos de desenvolvimento mobile com **React Native e Expo**, especialmente:
+
+* Gerenciamento de estado global
+* Redux Toolkit
+* Persistência de estado
+* Componentização
+* TypeScript
+* Animações
+* Navegação e overlays
+* Manipulação de formulários
+* UX para aplicações mobile
+
+---
+
+## 👨‍💻 Autor
+
+**Gabriel Torres**
+
+Desenvolvedor Full Stack com experiência em aplicações web e mobile.
+
+### Tecnologias
+
+```text
+TypeScript • JavaScript • React Native • Expo
+Node.js • NestJS • Next.js • Angular
+PostgreSQL • SQL Server • Prisma
+Docker • Firebase • Supabase
+```
+
+---
+
+## 📄 Licença
+
+Este projeto está disponível sob a licença **MIT**.
+
+Sinta-se livre para estudar, modificar e utilizar o código.
