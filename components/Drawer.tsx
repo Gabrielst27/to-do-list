@@ -20,6 +20,7 @@ type DrawerProps = {
   onClose: () => void;
   onSaveTitle: (id: string, newTitle: string) => boolean;
   onToggle: (id: string) => void;
+  onDelete: (id: string) => void;
 };
 
 export function Drawer({
@@ -28,6 +29,7 @@ export function Drawer({
   onClose,
   onSaveTitle,
   onToggle,
+  onDelete,
 }: DrawerProps) {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
@@ -64,6 +66,27 @@ export function Drawer({
     return null;
   }
 
+  function handleDelete() {
+    Alert.alert(
+      "Excluir tarefa",
+      "Tem certeza que deseja excluir esta tarefa?",
+      [
+        {
+          text: "Não",
+          style: "cancel",
+        },
+        {
+          text: "Sim",
+          style: "destructive",
+          onPress: () => {
+            onDelete(task.id);
+            onClose();
+          },
+        },
+      ],
+    );
+  }
+
   return (
     <View style={styles.drawerOverlay}>
       <Pressable style={styles.overlay} onPress={closeDrawer} />
@@ -79,19 +102,15 @@ export function Drawer({
       >
         <View style={styles.drawerHeader}>
           <View style={styles.topRow}>
-            <View style={styles.closeDrawerRow}>
-              <Pressable onPress={closeDrawer}>
-                <MaterialIcons
-                  name="close"
-                  size={24}
-                  color={Theme.colors.primary50}
-                />
-              </Pressable>
-
+            <Pressable style={styles.closeDrawerRow} onPress={closeDrawer}>
+              <MaterialIcons
+                name="close"
+                size={24}
+                color={Theme.colors.primary50}
+              />
               <Text style={styles.closeDrawerText}>Fechar</Text>
-            </View>
-
-            <Pressable onPress={closeDrawer}>
+            </Pressable>
+            <Pressable onPress={handleDelete}>
               <MaterialIcons
                 name="delete"
                 size={24}
@@ -279,8 +298,5 @@ const styles = StyleSheet.create({
   },
   toggleButtonText: {
     color: Theme.colors.primary50,
-  },
-  deleteButton: {
-    backgroundColor: Theme.colors.danger,
   },
 });

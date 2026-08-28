@@ -3,7 +3,12 @@ import { TaskList } from "@/components/TaskList";
 import { Toolbar } from "@/components/Toolbar";
 import { TaskModel } from "@/models/task";
 import { persistor, store } from "@/store";
-import { addTask, toggleTask, updateTask } from "@/store/tasks-slice";
+import {
+  addTask,
+  deleteTask,
+  toggleTask,
+  updateTask,
+} from "@/store/tasks-slice";
 import { Theme } from "@/themes/theme";
 import {
   Inter_400Regular,
@@ -57,6 +62,10 @@ function App() {
     dispatch(toggleTask(id));
   }
 
+  function handleDeleteTask(id: string) {
+    dispatch(deleteTask(id));
+  }
+
   function handleSelectTask(task: TaskModel) {
     setSelectedTask(task);
     setDrawerVisible(true);
@@ -83,6 +92,7 @@ function App() {
             onClose={handleCloseDrawer}
             onSaveTitle={handleSaveTaskTitle}
             onToggle={handleToggleTask}
+            onDelete={handleDeleteTask}
           />
         )}
       </SafeAreaView>
