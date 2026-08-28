@@ -19,14 +19,22 @@ type DrawerProps = {
   task: TaskModel;
   onClose: () => void;
   onSaveTitle: (id: string, newTitle: string) => boolean;
+  onToggle: (id: string) => void;
 };
 
-export function Drawer({ visible, task, onClose, onSaveTitle }: DrawerProps) {
+export function Drawer({
+  visible,
+  task,
+  onClose,
+  onSaveTitle,
+  onToggle,
+}: DrawerProps) {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
 
   const [newTitle, setNewTitle] = useState(task.title);
   const [savedTitle, setSavedTitle] = useState(task.title);
+  const [isDone, setIsDone] = useState(task.isDone);
 
   const translateX = useRef(new Animated.Value(width)).current;
 
@@ -142,11 +150,37 @@ export function Drawer({ visible, task, onClose, onSaveTitle }: DrawerProps) {
             </Text>
           </Pressable>
 
-          <Pressable style={[styles.button, styles.finishButton]}>
-            <Text style={[styles.buttonText, styles.finishButtonText]}>
-              Concluir Tarefa
-            </Text>
-          </Pressable>
+          {!isDone ? (
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                pressed ? styles.pressedToggleButton : styles.toggleButton,
+              ]}
+              onPress={() => {
+                setIsDone(!isDone);
+                onToggle(task.id);
+              }}
+            >
+              <Text style={[styles.buttonText, styles.toggleButtonText]}>
+                Concluir tarefa
+              </Text>
+            </Pressable>
+          ) : (
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                pressed ? styles.pressedToggleButton : styles.toggleButton,
+              ]}
+              onPress={() => {
+                setIsDone(!isDone);
+                onToggle(task.id);
+              }}
+            >
+              <Text style={[styles.buttonText, styles.toggleButtonText]}>
+                Reabrir tarefa
+              </Text>
+            </Pressable>
+          )}
         </View>
       </Animated.View>
     </View>
@@ -237,10 +271,13 @@ const styles = StyleSheet.create({
   disabledSaveTitleButtonText: {
     color: Theme.colors.mutedForeground,
   },
-  finishButton: {
+  toggleButton: {
     backgroundColor: Theme.colors.primary500,
   },
-  finishButtonText: {
+  pressedToggleButton: {
+    backgroundColor: Theme.colors.primary700,
+  },
+  toggleButtonText: {
     color: Theme.colors.primary50,
   },
   deleteButton: {
