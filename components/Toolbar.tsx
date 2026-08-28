@@ -1,56 +1,81 @@
-import { Drawer } from "@/components/Drawer";
 import { Theme } from "@/themes/theme";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Alert, Pressable, StyleSheet, TextInput, View } from "react-native";
 
-export function Toolbar() {
-  const insets = useSafeAreaInsets();
+type ToolbarProps = {
+  onAdd: (title: string) => void;
+};
 
-  const [drawerIsVisible, setDrawerIsVisible] = useState(false);
+export function Toolbar({ onAdd }: ToolbarProps) {
+  const [title, setTitle] = useState("");
 
-  function closeDrawer() {
-    setDrawerIsVisible(false);
+  function handleAdd() {
+    const normalizedTitle = title.trim();
+
+    if (!normalizedTitle) {
+      Alert.alert(
+        "Título obrigatório",
+        "Digite um título para criar a tarefa.",
+      );
+      return;
+    }
+
+    onAdd(normalizedTitle);
+    setTitle("");
   }
 
   return (
-    <>
-      {drawerIsVisible && (
-        <Drawer isMounted={drawerIsVisible} onClose={closeDrawer} />
-      )}
-
-      <View style={[styles.mainContainer, { height: insets.bottom + 40 }]}>
-        <Pressable
-          style={({ pressed }) => [
-            styles.addButton,
-            {
-              backgroundColor: pressed
-                ? Theme.colors.primary700
-                : Theme.colors.primary500,
-            },
-          ]}
-          onPress={() => setDrawerIsVisible(true)}
-        >
-          <MaterialIcons name="add" size={40} color={Theme.colors.primary50} />
-        </Pressable>
-      </View>
-    </>
+    <View style={styles.mainContainer}>
+      <TextInput
+        value={title}
+        onChangeText={setTitle}
+        style={styles.titleInput}
+        placeholder="Digite a nova tarefa"
+        placeholderTextColor={Theme.colors.muted}
+        returnKeyType="done"
+        onSubmitEditing={handleAdd}
+      ></TextInput>
+      <Pressable
+        style={({ pressed }) => [
+          styles.addButton,
+          {
+            backgroundColor: pressed
+              ? Theme.colors.primary700
+              : Theme.colors.primary500,
+          },
+        ]}
+        onPress={handleAdd}
+      >
+        <MaterialIcons name="add" size={32} color={Theme.colors.primary50} />
+      </Pressable>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor: Theme.colors.tabs,
+    padding: 24,
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    position: "relative",
+    gap: 24,
+    backgroundColor: Theme.colors.toolbar,
   },
-
+  titleInput: {
+    flex: 1,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderTopLeftRadius: 16,
+    borderBottomRightRadius: 16,
+    borderColor: Theme.colors.primary50,
+    backgroundColor: Theme.colors.background,
+    color: Theme.colors.primary50,
+    fontSize: Theme.text.sizes.default,
+  },
   addButton: {
-    position: "absolute",
-    top: -32,
-    width: 64,
-    height: 64,
+    width: 48,
+    height: 48,
     borderRadius: 32,
     justifyContent: "center",
     alignItems: "center",
