@@ -263,7 +263,7 @@ Tenha instalado:
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/SEU_USUARIO/todo-list.git
+git clone https://github.com/Gabrielst27/to-do-list
 ```
 
 Entre na pasta:
@@ -339,41 +339,6 @@ eas build --platform android
 
 ---
 
-## 📌 Próximos passos
-
-Algumas funcionalidades que podem ser adicionadas futuramente:
-
-* [ ] Categorias de tarefas
-* [ ] Prioridade das tarefas
-* [ ] Data de vencimento
-* [ ] Filtros
-* [ ] Ordenação
-* [ ] Busca de tarefas
-* [ ] Notificações
-* [ ] Sincronização com backend
-* [ ] Autenticação de usuários
-* [ ] Persistência em banco de dados
-* [ ] Testes unitários
-* [ ] Testes de componentes
-
----
-
-## 📚 Objetivo do projeto
-
-Este projeto foi desenvolvido como uma aplicação prática para explorar conceitos de desenvolvimento mobile com **React Native e Expo**, especialmente:
-
-* Gerenciamento de estado global
-* Redux Toolkit
-* Persistência de estado
-* Componentização
-* TypeScript
-* Animações
-* Navegação e overlays
-* Manipulação de formulários
-* UX para aplicações mobile
-
----
-
 ## 👨‍💻 Autor
 
 **Gabriel Torres**
@@ -385,14 +350,6 @@ Desenvolvedor Full Stack com experiência em aplicações web e mobile.
 ```text
 TypeScript • JavaScript • React Native • Expo
 Node.js • NestJS • Next.js • Angular
-PostgreSQL • SQL Server • Prisma
+PostgreSQL • SQL Server • SQLite • Prisma
 Docker • Firebase • Supabase
 ```
-
----
-
-## 📄 Licença
-
-Este projeto está disponível sob a licença **MIT**.
-
-Sinta-se livre para estudar, modificar e utilizar o código.
